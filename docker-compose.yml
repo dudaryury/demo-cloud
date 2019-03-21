@@ -1,0 +1,27 @@
+version: "3"
+services:
+  eureka:
+    image: dudar/eureka:v1
+    ports:
+      - "8761:8761"
+  config-server:
+    image: dudar/config-server:v1
+    depends_on:
+      - eureka
+  gateway:
+    image: dudar/gateway:v1
+    depends_on:
+      - eureka
+      - config-server
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_APPLICATION_JSON: '{"eureka.client.serviceUrl.defaultZone": "http://eureka:8761/eureka/"}'
+
+  random-web:
+    image: dudar/random-web:v1
+    depends_on:
+      - eureka
+      - config-server
+    environment:
+      SPRING_APPLICATION_JSON: '{"eureka.client.serviceUrl.defaultZone": "http://eureka:8761/eureka/"}'

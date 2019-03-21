@@ -1,0 +1,17 @@
+server:
+  port: 8082
+
+zuul:
+  ignoredServices: '*'
+  routes:
+    randow-web:
+      path: /random/**
+      serviceId: randow-web
+      stripPrefix: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+
